@@ -258,6 +258,9 @@
     font-family: inherit;
     font-size: 0.95rem;
     transition: all 0.3s ease;
+    white-space: pre-wrap;
+    word-break: normal;
+    overflow-wrap: break-word;
   }
 
   textarea.small {
@@ -326,6 +329,7 @@
     border: 1px solid var(--border);
     text-align: center;
     transition: all 0.3s ease;
+    min-width: 0;
   }
 
   .kpi .k:hover {
@@ -343,9 +347,12 @@
 
   .kpi .k .v {
     font-weight: 800;
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     color: var(--accent);
-    word-break: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
   }
 
   .log {
@@ -577,8 +584,7 @@
         </div>
 
         <div class="hint">
-          إذا كان حقل المجلدات الفرعية فارغًا، سيتم إنشاء المجلدات الرئيسية فقط.
-          وإذا أضفت مجلدات فرعية، فسيتم إنشاؤها داخل كل مجلد رئيسي تلقائيًا.
+          يتم حذف التكرار تلقائيًا بعد التنظيف. إذا كان حقل المجلدات الفرعية فارغًا، سيتم إنشاء المجلدات الرئيسية فقط.
         </div>
       </div>
 
@@ -591,7 +597,7 @@
           </div>
           <div class="k">
             <div class="small">المكان المختار</div>
-            <div class="v" id="chosen">—</div>
+            <div class="v" id="chosen" title="—">—</div>
           </div>
           <div class="k">
             <div class="small">المجلدات المنشأة</div>
@@ -606,7 +612,7 @@
 
     <div class="footer">
       <span class="pill"><span class="dot"></span> يعمل محلياً — لا يتم رفع أي بيانات</span>
-      <span class="pill"><span class="dot"></span> تم تطويره لدعم المجلدات الفرعية</span>
+      <span class="pill"><span class="dot"></span> يمنع التكرار تلقائيًا</span>
     </div>
   </div>
 
@@ -664,18 +670,53 @@
 
   function sanitizeName(name) {
     if (!name) return '';
-    let s = name.replace(/[\u200E\u200F\u202A\u202B\u202C\u202D\u202E]/g, '');
-    s = s.replace(INVALID_CHARS, ' ').replace(TRAILING_DOTS_SPACES, '').trim();
+
+    let s = String(name);
+
+    s = s.replace(/[\u200E\u200F\u202A\u202B\u202C\u202D\u202E\u2066\u2067\u2068\u2069]/g, '');
+    s = s.replace(/[\r\n\t]+/g, ' ');
+    s = s.replace(INVALID_CHARS, ' ');
+    s = s.replace(/\s{2,}/g, ' ');
+    s = s.replace(TRAILING_DOTS_SPACES, '').trim();
+
     if (RESERVED_NAMES.test(s)) s = '_' + s;
     if (s.length > 120) s = s.slice(0, 120).trim();
+
     return s;
+  }
+
+  function normalizeLines(text) {
+    return String(text || '')
+      .split(/\r?\n/)
+      .map(line => line.replace(/[\t\r]+/g, ' ').replace(/\s+/g, ' ').trim())
+      .filter(Boolean);
+  }
+
+  function uniquePartsList(list) {
+    const result = [];
+    const seen = new Set();
+
+    for (const parts of list) {
+      const key = parts.join('///');
+      if (!seen.has(key)) {
+        seen.add(key);
+        result.push(parts);
+      }
+    }
+
+    return result;
   }
 
   function parseLineToParts(line, allowNested) {
     if (!line) return [];
+
     if (allowNested) {
-      return line.split('/').map(p => sanitizeName(p.trim())).filter(Boolean);
+      return line
+        .split('/')
+        .map(p => sanitizeName(p.trim()))
+        .filter(Boolean);
     }
+
     const clean = sanitizeName(line);
     return clean ? [clean] : [];
   }
@@ -683,21 +724,14 @@
   function parseAll() {
     const allowNested = el.allowNested.checked;
 
-    const mainLines = (el.names.value || '')
-      .split(/\r?\n/)
-      .map(l => l.trim())
-      .filter(Boolean);
+    const mainLines = normalizeLines(el.names.value);
+    const subLines = normalizeLines(el.subfoldersText.value);
 
-    const subLines = (el.subfoldersText.value || '')
-      .split(/\r?\n/)
-      .map(l => l.trim())
-      .filter(Boolean);
-
-    const parsedMain = [];
-    const parsedSub = [];
+    let parsedMain = [];
+    let parsedSub = [];
     const invalid = [];
     const finalPaths = [];
-    const seen = new Set();
+    const seenFinal = new Set();
 
     for (const line of mainLines) {
       const parts = parseLineToParts(line, allowNested);
@@ -711,13 +745,16 @@
       else invalid.push(line);
     }
 
+    parsedMain = uniquePartsList(parsedMain);
+    parsedSub = uniquePartsList(parsedSub);
+
     if (parsedSub.length > 0) {
       for (const mainParts of parsedMain) {
         for (const subParts of parsedSub) {
           const full = [...mainParts, ...subParts];
           const key = full.join('///');
-          if (!seen.has(key)) {
-            seen.add(key);
+          if (!seenFinal.has(key)) {
+            seenFinal.add(key);
             finalPaths.push(full);
           }
         }
@@ -725,8 +762,8 @@
     } else {
       for (const mainParts of parsedMain) {
         const key = mainParts.join('///');
-        if (!seen.has(key)) {
-          seen.add(key);
+        if (!seenFinal.has(key)) {
+          seenFinal.add(key);
           finalPaths.push(mainParts);
         }
       }
@@ -806,7 +843,9 @@
 
     try {
       dirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
-      el.chosen.textContent = dirHandle.name || '—';
+      const chosenName = dirHandle?.name || '—';
+      el.chosen.textContent = chosenName;
+      el.chosen.title = chosenName;
 
       const permitted = await verifyPermission(dirHandle);
       if (permitted) {
