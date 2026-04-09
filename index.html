@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>منشئ المجلدات الاحترافي</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Fira+Code:wght@400;500&display=swap');
+
+    :root {
+      --bg-base: #09090b;
+      --bg-surface: #18181b;
+      --bg-surface-hover: #27272a;
+      --border: #27272a;
+      --border-hover: #3f3f46;
+
+      --text-main: #f4f4f5;
+      --text-muted: #a1a1aa;
+
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-glow: rgba(99, 102, 241, 0.2);
+
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --info: #60a5fa;
+
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+
+      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: 'Tajawal', system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 2rem 1rem;
+      line-height: 1.5;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 992px) {
+      .container {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .header {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .brand h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .brand h1::before {
+      content: '';
+      display: block;
+      width: 12px;
+      height: 12px;
+      background: var(--primary);
+      border-radius: 4px;
+      box-shadow: 0 0 15px var(--primary-glow);
+    }
+
+    .brand p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 0.25rem;
+    }
+
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    button {
+      background: transparent;
+      color: var(--text-main);
+      border: 1px solid var(--border);
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    button:hover:not(:disabled) {
+      background: var(--bg-surface-hover);
+      border-color: var(--border-hover);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    button.primary {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    button.primary:hover:not(:disabled) {
+      background: var(--primary-hover);
+      border-color: var(--primary-hover);
+      box-shadow: 0 4px 20px var(--primary-glow);
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .input-group label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 180px;
+      background: var(--bg-base);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 1rem;
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      resize: vertical;
+      transition: var(--transition);
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    textarea::placeholder {
+      color: #52525b;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1rem;
+    }
+
+    .stat-box {
+      background: var(--bg-base);
+      border: 1px solid var(--border);
+      padding: 1rem;
+      border-radius: var(--radius-md);
+      text-align: center;
+    }
+
+    .stat-box .label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .stat-box .value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .stat-box .value.highlight {
+      color: var(--primary);
+    }
+
+    .terminal {
+      background: #000;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      height: 320px;
+      overflow-y: auto;
+      color: #a1a1aa;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .terminal .ok { color: var(--success); }
+    .terminal .err { color: var(--danger); }
+    .terminal .warn { color: var(--warning); }
+    .terminal .info { color: var(--info); }
+
+    #toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 9999;
+    }
+
+    .toast {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 16px 24px;
+      border-radius: var(--radius-md);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 500;
+      animation: slideIn 0.3s ease forwards;
+      transform: translateX(100%);
+      opacity: 0;
+      max-width: 420px;
+    }
+
+    @keyframes slideIn {
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes slideOut {
+      to { transform: translateX(100%); opacity: 0; }
+    }
+
+    .checkbox-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      cursor: pointer;
+      user-select: none;
+      margin-top: 0.5rem;
+    }
+
+    .checkbox-wrapper input[type="checkbox"] {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border-hover);
+      border-radius: 6px;
+      background: var(--bg-base);
+      cursor: pointer;
+      position: relative;
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
+
+    .checkbox-wrapper input[type="checkbox"]:checked {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .checkbox-wrapper input[type="checkbox"]:checked::after {
+      content: "✓";
+      position: absolute;
+      color: white;
+      font-size: 14px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .checkbox-wrapper span {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .status-note {
+      padding: 0.9rem 1rem;
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      color: #fcd34d;
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+    }
+
+    .hint {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    code {
+      font-family: 'Fira Code', monospace;
+      background: rgba(255,255,255,0.06);
+      padding: 0.15rem 0.35rem;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="toast-container"></div>
+
+  <div class="container">
+    <header class="header">
+      <div class="brand">
+        <h1>منشئ المجلدات الذكي</h1>
+        <p>بناء هيكلة المجلدات المعقدة بضغطة زر واحدة</p>
+      </div>
+      <div class="actions">
+        <button id="btnPick" class="primary" type="button">
+          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+          </svg>
+          تحديد مسار الحفظ
+        </button>
+
+        <button id="btnPreview" type="button">
+          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+          </svg>
+          معاينة
+        </button>
+
+        <button id="btnCreate" type="button" disabled>
+          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M5 13l4 4L19 7"></path>
+          </svg>
+          بدء الإنشاء
+        </button>
+      </div>
+    </header>
+
+    <main class="card">
+      <h2 class="card-title">📝 إعدادات الهيكلة</h2>
+
+      <div id="runtimeNote" class="status-note" style="display:none;"></div>
+
+      <div class="input-group">
+        <label for="names">المجلدات الرئيسية (سطر لكل اسم)</label>
+        <textarea id="names" placeholder="أدخل أسماء الأشخاص أو الأقسام...
+مثال:
+محمد
+أحمد
+خالد"></textarea>
+      </div>
+
+      <div class="input-group">
+        <label for="subfoldersText">المجلدات الفرعية (تضاف تلقائياً داخل كل مجلد رئيسي - اختياري)</label>
+        <textarea id="subfoldersText" style="min-height: 120px;" placeholder="أدخل التصنيفات...
+مثال:
+1- الأداء
+2- الإشراف
+3- الحضور"></textarea>
+      </div>
+
+      <label class="checkbox-wrapper">
+        <input type="checkbox" id="allowNested" />
+        <span>السماح باستخدام الشرطة المائلة <b>/</b> لإنشاء مسارات متداخلة يدوياً</span>
+      </label>
+
+      <div class="hint">
+        الأفضل تشغيل الملف عبر <code>localhost</code> أو على موقع <code>https</code> ومن خلال
+        <strong>Chrome</strong> أو <strong>Edge</strong> وعلى نافذة مستقلة، لأن اختيار المجلدات يعتمد
+        على File System Access API.  [oai_citation:1‡developer.mozilla.org](https://developer.mozilla.org/en-US/docs/Web/API/Window/showDirectoryPicker?utm_source=chatgpt.com)
+      </div>
+    </main>
+
+    <aside class="card">
+      <h2 class="card-title">📊 حالة النظام</h2>
+
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="label">المجلدات المتوقعة</div>
+          <div class="value highlight" id="total">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="label">المسار المختار</div>
+          <div class="value" id="chosen" style="font-size: 1rem; overflow:hidden; text-overflow: ellipsis; white-space: nowrap;" title="لم يتم التحديد">—</div>
+        </div>
+        <div class="stat-box">
+          <div class="label">ما تم إنشاؤه</div>
+          <div class="value" id="doneCount" style="color: var(--success)">0</div>
+        </div>
+      </div>
+
+      <div class="terminal" id="log" aria-live="polite"></div>
+    </aside>
+  </div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const el = {
+        names: document.getElementById('names'),
+        subfoldersText: document.getElementById('subfoldersText'),
+        allowNested: document.getElementById('allowNested'),
+        btnPick: document.getElementById('btnPick'),
+        btnPreview: document.getElementById('btnPreview'),
+        btnCreate: document.getElementById('btnCreate'),
+        chosen: document.getElementById('chosen'),
+        doneCount: document.getElementById('doneCount'),
+        total: document.getElementById('total'),
+        log: document.getElementById('log'),
+        toastContainer: document.getElementById('toast-container'),
+        runtimeNote: document.getElementById('runtimeNote')
+      };
+
+      let dirHandle = null;
+      let createdCount = 0;
+      let isBusy = false;
+
+      const supportsDirectoryPicker = typeof window.showDirectoryPicker === "function";
+      const isTopLevel = window.top === window.self;
+      const isSecure = window.isSecureContext;
+
+      const INVALID_CHARS = /[<>:"/\\|?*\x00-\x1F]/g;
+      const TRAILING_DOTS_SPACES = /[ .]+$/;
+      const RESERVED_NAMES = /^(con|prn|aux|nul|com[1-9]|lpt[1-9])$/i;
+
+      init();
+
+      function init() {
+        logTerminal("النظام جاهز. بانتظار إدخال البيانات وتحديد المسار...", "info");
+
+        const issues = [];
+
+        if (!supportsDirectoryPicker) {
+          issues.push("المتصفح الحالي لا يدعم showDirectoryPicker().");
+        }
+        if (!isSecure) {
+          issues.push("الصفحة لا تعمل ضمن Secure Context. شغّلها عبر https أو localhost.");
+        }
+        if (!isTopLevel) {
+          issues.push("الأداة تعمل داخل Iframe أو معاينة مضمنة، وهذا قد يمنع اختيار المجلد.");
+        }
+
+        if (issues.length) {
+          const msg = issues.join(" ");
+          el.runtimeNote.style.display = "block";
+          el.runtimeNote.textContent = msg;
+          logTerminal(msg, "warn");
+        } else {
+          logTerminal("البيئة مناسبة لاستخدام File System Access API.", "ok");
+        }
+
+        if (!supportsDirectoryPicker) {
+          el.btnPick.disabled = true;
+          showToast("المتصفح لا يدعم اختيار المجلدات. استخدم Chrome أو Edge على الكمبيوتر.", "err");
+        }
+
+        bindEvents();
+        updateStats();
+        updateCreateButtonState();
+      }
+
+      function bindEvents() {
+        el.names.addEventListener('input', updateStats);
+        el.subfoldersText.addEventListener('input', updateStats);
+        el.allowNested.addEventListener('change', updateStats);
+
+        el.btnPick.addEventListener('click', handlePickDirectory);
+        el.btnPreview.addEventListener('click', handlePreview);
+        el.btnCreate.addEventListener('click', handleCreate);
+      }
+
+      function showToast(message, type = "info") {
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+
+        let icon = "ℹ️";
+        if (type === "ok") icon = "✅";
+        if (type === "err") icon = "❌";
+        if (type === "warn") icon = "⚠️";
+
+        toast.innerHTML = <span>${icon}</span><span>${escapeHtml(message)}</span>;
+        el.toastContainer.appendChild(toast);
+
+        setTimeout(() => {
+          toast.style.animation = 'slideOut 0.3s ease forwards';
+          setTimeout(() => toast.remove(), 300);
+        }, 4000);
+      }
+
+      function escapeHtml(str) {
+        return String(str)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function logTerminal(msg, level = 'info') {
+        const line = document.createElement('div');
+        line.className = level;
+        line.textContent = > ${msg};
+        el.log.appendChild(line);
+        el.log.scrollTop = el.log.scrollHeight;
+      }
+
+      function sanitizeName(name) {
+        if (!name) return '';
+        let s = name.replace(/[\u200E\u200F\u202A-\u202E]/g, '');
+        s = s.replace(INVALID_CHARS, ' ');
+        s = s.replace(/\s+/g, ' ').trim();
+        s = s.replace(TRAILING_DOTS_SPACES, '').trim();
+        if (RESERVED_NAMES.test(s)) s = '_' + s;
+        if (s.length > 120) s = s.slice(0, 120).trim();
+        return s;
+      }
+
+      function parseNames() {
+        const rawNames = el.names.value || '';
+        const rawSub = el.subfoldersText.value || '';
+        const allowNested = el.allowNested.checked;
+
+        const mainLines = rawNames
+          .split(/\r?\n/)
+          .map(line => line.trim())
+          .filter(Boolean);
+
+        const subLines = rawSub
+          .split(/\r?\n/)
+          .map(line => line.trim())
+          .filter(Boolean);
+
+        const parsed = [];
+        const invalid = [];
+        const seen = new Set();
+
+        for (const line of mainLines) {
+          let mainParts;
+
+          if (allowNested) {
+            mainParts = line
+              .split('/')
+              .map(part => sanitizeName(part))
+              .filter(Boolean);
+          } else {
+            const single = sanitizeName(line);
+            mainParts = single ? [single] : [];
+          }
+
+          if (!mainParts.length) {
+            invalid.push(line);
+            continue;
+          }
+
+          if (subLines.length > 0) {
+            for (const rawSubLine of subLines) {
+              const sub = sanitizeName(rawSubLine);
+              if (!sub) {
+                invalid.push(rawSubLine);
+                continue;
+              }
+              const fullPath = [...mainParts, sub];
+              const key = fullPath.join('///');
+              if (!seen.has(key)) {
+                seen.add(key);
+                parsed.push(fullPath);
+              }
+            }
+          } else {
+            const key = mainParts.join('///');
+            if (!seen.has(key)) {
+              seen.add(key);
+              parsed.push(mainParts);
+            }
+          }
+        }
+
+        return {
+          parsed,
+          invalid,
+          total: parsed.length
+        };
+      }
+
+      function updateStats() {
+        const { total } = parseNames();
+        el.total.textContent = String(total);
+        updateCreateButtonState();
+      }
+
+      function updateCreateButtonState() {
+        const { total } = parseNames();
+        el.btnCreate.disabled = !dirHandle || total === 0 || isBusy;
+      }
+
+      async function verifyWritePermission(handle) {
+        if (!handle) return false;
+
+        try {
+          if (typeof handle.queryPermission === "function") {
+            const current = await handle.queryPermission({ mode: "readwrite" });
+            if (current === "granted") return true;
+          }
+
+          if (typeof handle.requestPermission === "function") {
+            const result = await handle.requestPermission({ mode: "readwrite" });
+            return result === "granted";
+          }
+
+          return false;
+        } catch (error) {
+          logTerminal(تعذر التحقق من الصلاحية: ${error.message}, "err");
+          return false;
+        }
+      }
+
+      async function ensureDir(pathParts) {
+        let current = dirHandle;
+        for (const part of pathParts) {
+          current = await current.getDirectoryHandle(part, { create: true });
+        }
+        return current;
+      }
+
+      async function handlePickDirectory() {
+        if (!supportsDirectoryPicker) {
+          showToast("المتصفح الحالي لا يدعم اختيار المجلدات.", "err");
+          return;
+        }
+
+        if (!isSecure) {
+          showToast("شغّل الملف عبر localhost أو https لأن المتصفح يمنع العملية هنا.", "err");
+          logTerminal("فشل التنفيذ: الصفحة ليست ضمن Secure Context.", "err");
+          return;
+        }
+
+        if (!isTopLevel) {
+          showToast("افتح الملف في نافذة مستقلة، وليس داخل معاينة مضمنة.", "warn");
+          logTerminal("فشل التنفيذ: الصفحة تعمل داخل Iframe أو Preview.", "err");
+          return;
+        }
+
+        try {
+          logTerminal("جاري فتح نافذة اختيار المجلد...", "info");
+
+          const handle = await window.showDirectoryPicker({
+            mode: "readwrite",
+            id: "folder-builder-save-path",
+            startIn: "documents"
+          });
+
+          if (!handle) {
+            logTerminal("لم يتم اختيار أي مجلد.", "warn");
+            return;
+          }
+
+          const granted = await verifyWritePermission(handle);
+
+          if (!granted) {
+            dirHandle = null;
+            el.chosen.textContent = "—";
+            el.chosen.title = "لم يتم التحديد";
+            updateCreateButtonState();
+            showToast("تم رفض صلاحية الكتابة على المجلد.", "err");
+            logTerminal("تم اختيار مجلد، لكن صلاحية الكتابة لم تُمنح.", "err");
+            return;
+          }
+
+          dirHandle = handle;
+          el.chosen.textContent = handle.name || "مجلد محدد";
+          el.chosen.title = handle.name || "مجلد محدد";
+
+          logTerminal(تم ربط المسار بنجاح: ${handle.name}, "ok");
+          showToast(تم تحديد مسار الحفظ: ${handle.name}, "ok");
+          updateCreateButtonState();
+        } catch (error) {
+          if (error.name === "AbortError") {
+            logTerminal("تم إلغاء اختيار المجلد من قبل المستخدم.", "warn");
+            showToast("تم إلغاء العملية.", "warn");
+            return;
+          }
+
+          if (error.name === "SecurityError") {
+            logTerminal("خطأ أمني: المتصفح منع فتح اختيار المجلد. افتح الملف عبر localhost أو https وفي نافذة مستقلة.", "err");
+            showToast("المتصفح منع العملية لأسباب أمنية.", "err");
+            return;
+          }
+
+          logTerminal(فشل تحديد المسار: ${error.message}, "err");
+          showToast("تعذر فتح نافذة اختيار المجلد.", "err");
+        }
+      }
+
+      function handlePreview() {
+        const { parsed, invalid, total } = parseNames();
+
+        if (total === 0) {
+          showToast("لا يوجد مسارات للمعاينة. أدخل البيانات أولاً.", "warn");
+          logTerminal("المعاينة فشلت: لا توجد بيانات صالحة.", "warn");
+          return;
+        }
+
+        logTerminal("----- وضع المعاينة -----", "info");
+        logTerminal(إجمالي المسارات المتوقعة: ${total}, "ok");
+
+        const sample = parsed.slice(0, 10);
+        for (const pathParts of sample) {
+          logTerminal(📁 ${pathParts.join('/')}, "info");
+        }
+
+        if (parsed.length > 10) {
+          logTerminal(... وهناك ${parsed.length - 10} مسار إضافي., "info");
+        }
+
+        if (invalid.length) {
+          logTerminal(تم تجاهل ${invalid.length} قيمة غير صالحة بعد التنظيف., "warn");
+        }
+
+        showToast("تم عرض المعاينة في سجل النظام.", "info");
+      }
+
+      async function handleCreate() {
+        if (isBusy) return;
+
+        if (!dirHandle) {
+          showToast("يرجى تحديد مسار الحفظ أولاً.", "warn");
+          logTerminal("لا يمكن البدء: لم يتم اختيار المجلد الهدف.", "warn");
+          return;
+        }
+
+        const { parsed, total } = parseNames();
+
+        if (!parsed.length) {
+          showToast("لا توجد أسماء أو مسارات صالحة للإنشاء.", "warn");
+          logTerminal("لا يمكن البدء: لا توجد مسارات صالحة.", "warn");
+          return;
+        }
+
+        const permissionGranted = await verifyWritePermission(dirHandle);
+        if (!permissionGranted) {
+          showToast("لا توجد صلاحية كتابة على المجلد المحدد.", "err");
+          logTerminal("تعذر بدء الإنشاء بسبب رفض صلاحية الكتابة.", "err");
+          return;
+        }
+
+        isBusy = true;
+        createdCount = 0;
+        el.doneCount.textContent = '0';
+        updateCreateButtonState();
+
+        const originalBtnHtml = el.btnCreate.innerHTML;
+        el.btnCreate.innerHTML = "⏳ جاري الإنشاء...";
+
+        logTerminal(بدء عملية إنشاء ${total} مجلد..., "info");
+
+        let failedCount = 0;
+
+        for (const parts of parsed) {
+          try {
+            await ensureDir(parts);
+            createdCount++;
+            el.doneCount.textContent = String(createdCount);
+            logTerminal(✓ تم الإنشاء: ${parts.join('/')}, "ok");
+          } catch (error) {
+            failedCount++;
+            logTerminal(✗ فشل في: ${parts.join('/')} | السبب: ${error.message}, "err");
+          }
+        }
+
+        logTerminal("----- انتهاء العملية -----", "info");
+        logTerminal(تم إنشاء: ${createdCount} من أصل ${total}, createdCount === total ? "ok" : "warn");
+
+        if (failedCount === 0) {
+          showToast(اكتمل الإنشاء بنجاح. تم إنشاء ${createdCount} مجلد., "ok");
+        } else {
+          showToast(اكتمل التنفيذ مع بعض الإخفاقات. تم إنشاء ${createdCount} وفشل ${failedCount}., "warn");
+        }
+
+        el.btnCreate.innerHTML = originalBtnHtml;
+        isBusy = false;
+        updateCreateButtonState();
+      }
+    })();
+  </script>
+</body>
+</html>
