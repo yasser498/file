@@ -18,12 +18,10 @@
     --primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     --primary-hover: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
     --accent: #00d4ff;
-    --accent-2: #ff6b9d;
     --success: #00f5a0;
     --warning: #ffb800;
     --danger: #ff5757;
     --border: rgba(255, 255, 255, 0.1);
-    --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     --shadow-lg: 0 35px 70px -15px rgba(0, 0, 0, 0.6);
     --radius: 20px;
     --radius-sm: 12px;
@@ -65,7 +63,7 @@
   }
 
   .app {
-    width: min(100%, 1200px);
+    width: min(100%, 1250px);
     background: var(--card);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -73,18 +71,11 @@
     border-radius: var(--radius);
     box-shadow: var(--shadow-lg);
     overflow: hidden;
-    animation: slideUp 0.8s ease-out;
-  }
-
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
   }
 
   .header {
     padding: 32px;
     background: var(--glass-effect);
-    backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
@@ -106,12 +97,6 @@
     background: url('https://www.raed.net/img?id=1424388') center/cover;
     box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
     border: 2px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
-  }
-
-  .logo:hover {
-    transform: scale(1.05) rotate(2deg);
-    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
   }
 
   .brand-info h1 {
@@ -147,23 +132,6 @@
     font-size: 0.95rem;
     transition: all 0.3s ease;
     backdrop-filter: blur(10px);
-    position: relative;
-    overflow: hidden;
-  }
-
-  button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-    transition: left 0.5s ease;
-  }
-
-  button:hover::before {
-    left: 100%;
   }
 
   button:hover:not(:disabled) {
@@ -180,7 +148,6 @@
 
   button.primary:hover:not(:disabled) {
     background: var(--primary-hover);
-    box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
   }
 
   button:disabled {
@@ -191,7 +158,7 @@
 
   .content {
     display: grid;
-    grid-template-columns: 1.3fr 0.7fr;
+    grid-template-columns: 1.4fr 0.8fr;
     gap: 30px;
     padding: 32px;
   }
@@ -208,19 +175,12 @@
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 28px;
-    transition: all 0.3s ease;
-  }
-
-  .card:hover {
-    background: rgba(255, 255, 255, 0.08);
-    transform: translateY(-2px);
   }
 
   .card h3 {
     margin: 0 0 20px 0;
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     font-weight: 700;
-    color: var(--text);
     display: flex;
     align-items: center;
     gap: 10px;
@@ -234,14 +194,33 @@
     border-radius: 2px;
   }
 
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
+  @media (max-width: 768px) {
+    .grid-2 {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .field label {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--text-secondary);
+    font-weight: 600;
+  }
+
   textarea {
     width: 100%;
     min-height: 250px;
     resize: vertical;
     border-radius: var(--radius-sm);
-    padding: 20px;
+    padding: 18px;
     border: 1px solid var(--border);
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.22);
     color: var(--text);
     line-height: 1.8;
     font-family: inherit;
@@ -249,11 +228,15 @@
     transition: all 0.3s ease;
   }
 
+  textarea.small {
+    min-height: 180px;
+  }
+
   textarea:focus {
     outline: none;
     border-color: var(--accent);
     box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.32);
   }
 
   textarea::placeholder {
@@ -264,7 +247,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    margin: 20px 0;
+    margin-top: 18px;
     color: var(--text-secondary);
     font-weight: 500;
     flex-wrap: wrap;
@@ -274,7 +257,7 @@
     display: flex;
     gap: 15px;
     flex-wrap: wrap;
-    margin-top: 15px;
+    margin-top: 18px;
   }
 
   .stat {
@@ -288,7 +271,7 @@
 
   .stat b {
     color: var(--accent);
-    font-weight: 700;
+    font-weight: 800;
   }
 
   .kpi {
@@ -298,7 +281,7 @@
     margin-top: 15px;
   }
 
-  .kpi .k {
+  .k {
     background: rgba(0, 0, 0, 0.3);
     padding: 20px;
     border-radius: var(--radius-sm);
@@ -306,13 +289,13 @@
     text-align: center;
   }
 
-  .kpi .k .small {
+  .small-title {
     font-size: 0.8rem;
     color: var(--text-muted);
     margin-bottom: 8px;
   }
 
-  .kpi .k .v {
+  .v {
     font-weight: 800;
     font-size: 1.2rem;
     color: var(--accent);
@@ -321,12 +304,12 @@
 
   .log {
     font-family: 'Courier New', monospace;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.42);
     color: #d1fae5;
     border-radius: var(--radius-sm);
     border: 1px solid var(--border);
     padding: 20px;
-    height: 300px;
+    height: 320px;
     overflow: auto;
     white-space: pre-wrap;
     line-height: 1.7;
@@ -336,7 +319,7 @@
   .hint {
     color: var(--text-muted);
     font-size: 0.9rem;
-    line-height: 1.6;
+    line-height: 1.7;
     margin-top: 15px;
     padding: 15px;
     background: rgba(255,255,255,0.02);
@@ -373,12 +356,6 @@
     height: 8px;
     border-radius: 50%;
     background: var(--success);
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
   }
 
   .ok { color: var(--success); }
@@ -410,13 +387,12 @@
   }
 
   .modal {
-    width: min(100%, 420px);
-    background: rgba(20, 20, 35, 0.95);
+    width: min(100%, 430px);
+    background: rgba(20, 20, 35, 0.96);
     border: 1px solid rgba(255,255,255,0.12);
     border-radius: 24px;
     padding: 28px;
     text-align: center;
-    box-shadow: 0 35px 70px rgba(0,0,0,0.45);
   }
 
   .modal-icon {
@@ -443,7 +419,7 @@
     margin-bottom: 20px;
   }
 
-  .modal .modal-actions {
+  .modal-actions {
     display: flex;
     justify-content: center;
     gap: 10px;
@@ -480,15 +456,16 @@
 </style>
 </head>
 <body>
-  <div class="app" id="app">
+  <div class="app">
     <div class="header">
       <div class="brand">
         <div class="logo"></div>
         <div class="brand-info">
           <h1>منشئ المجلدات</h1>
-          <p>الصق أسماء المجلدات، اختر مكان الإنشاء، ثم أنشئها بضغطة زر</p>
+          <p>نفس الفكرة السابقة مع دعم إنشاء مجلدات فرعية داخل كل مجلد رئيسي</p>
         </div>
       </div>
+
       <div class="actions">
         <button id="btnPick" class="primary" type="button">اختيار مكان الإنشاء</button>
         <button id="btnPreview" type="button">معاينة</button>
@@ -498,42 +475,59 @@
 
     <div class="content">
       <div class="card">
-        <h3>لصق الأسماء (سطر لكل اسم)</h3>
-        <textarea id="names" placeholder="مثال:
-المرحلة المتوسطة
-المرحلة الثانوية
-مشروع 1
-قسم/مشروع/مجلد"></textarea>
+        <h3>المدخلات</h3>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="names">المجلدات الرئيسية (سطر لكل اسم)</label>
+            <textarea id="names" placeholder="مثال:
+محمد
+أحمد
+خالد"></textarea>
+          </div>
+
+          <div class="field">
+            <label for="subfoldersText">المجلدات الفرعية (سطر لكل اسم)</label>
+            <textarea id="subfoldersText" class="small" placeholder="مثال:
+الأداء
+الحضور
+الزيارات"></textarea>
+          </div>
+        </div>
 
         <div class="toggle">
           <input type="checkbox" id="allowNested" />
-          <span>السماح بالبنية المتداخلة باستخدام الشرطة المائلة <b>/</b> مثل <code>قسم/مشروع/مجلد</code></span>
+          <span>السماح بالبنية المتداخلة باستخدام الشرطة المائلة <b>/</b> في المجلدات الرئيسية أو الفرعية مثل <code>قسم/ملف</code></span>
         </div>
 
         <div class="stats">
-          <div class="stat">الإجمالي: <b id="total">0</b></div>
+          <div class="stat">الرئيسية: <b id="mainCount">0</b></div>
+          <div class="stat">الفرعية: <b id="subCount">0</b></div>
+          <div class="stat">إجمالي المسارات: <b id="total">0</b></div>
           <div class="stat">الصالح: <b id="valid">0</b></div>
           <div class="stat">غير الصالح: <b id="invalid">0</b></div>
         </div>
 
         <div class="hint">
-          يتم تنظيف الأسماء تلقائيًا من الرموز غير المسموح بها. إذا أصبح الاسم فارغًا بعد التنظيف سيتم تجاهله.
+          إن تركت حقل المجلدات الفرعية فارغًا، سيتم إنشاء المجلدات الرئيسية فقط.
+          أما إذا أضفت مجلدات فرعية، فسيتم إنشاؤها داخل كل مجلد رئيسي تلقائيًا.
         </div>
       </div>
 
       <div class="card">
         <h3>الحالة والمسار المختار</h3>
+
         <div class="kpi">
           <div class="k">
-            <div class="small">المتصفح</div>
+            <div class="small-title">المتصفح</div>
             <div class="v" id="cap">التحقق…</div>
           </div>
           <div class="k">
-            <div class="small">المكان المختار</div>
+            <div class="small-title">المكان المختار</div>
             <div class="v" id="chosen">—</div>
           </div>
           <div class="k">
-            <div class="small">المجلدات المنشأة</div>
+            <div class="small-title">ما تم إنشاؤه</div>
             <div class="v" id="doneCount">0</div>
           </div>
         </div>
@@ -547,7 +541,7 @@
 
     <div class="footer">
       <span class="pill"><span class="dot"></span> يعمل محلياً — لا يتم رفع أي بيانات</span>
-      <span class="pill"><span class="dot"></span> تم بواسطة: ياسر الهذلي</span>
+      <span class="pill"><span class="dot"></span> يدعم المجلدات الرئيسية والفرعية</span>
     </div>
   </div>
 
@@ -568,6 +562,7 @@
 
   const el = {
     names: document.getElementById('names'),
+    subfoldersText: document.getElementById('subfoldersText'),
     allowNested: document.getElementById('allowNested'),
     btnPick: document.getElementById('btnPick'),
     btnPreview: document.getElementById('btnPreview'),
@@ -578,6 +573,8 @@
     total: document.getElementById('total'),
     valid: document.getElementById('valid'),
     invalid: document.getElementById('invalid'),
+    mainCount: document.getElementById('mainCount'),
+    subCount: document.getElementById('subCount'),
     log: document.getElementById('log'),
     supportHint: document.getElementById('supportHint'),
     successModal: document.getElementById('successModal'),
@@ -596,9 +593,9 @@
   el.cap.className = hasFS ? 'v ok' : 'v warn';
 
   if (hasFS && isSecure) {
-    el.supportHint.innerHTML = 'النظام جاهز. اضغط <b>اختيار مكان الإنشاء</b> ثم امنح صلاحية الوصول للمجلد.';
+    el.supportHint.innerHTML = 'النظام جاهز. اضغط <b>اختيار مكان الإنشاء</b> ثم ابدأ التنفيذ.';
   } else if (hasFS && !isSecure) {
-    el.supportHint.innerHTML = '<span class="warn">المتصفح يدعم الميزة، لكن الصفحة ليست في سياق آمن كفاية. افتحها مباشرة في Chrome أو Edge.</span>';
+    el.supportHint.innerHTML = '<span class="warn">المتصفح يدعم الميزة، لكن الصفحة ليست في سياق آمن كفاية.</span>';
   } else {
     el.supportHint.innerHTML = '<span class="warn">المتصفح الحالي لا يدعم اختيار مجلد من النظام. يفضل Chrome أو Edge أو Brave.</span>';
   }
@@ -616,27 +613,69 @@
     return s;
   }
 
-  function parseNames() {
-    const raw = el.names.value || '';
-    const allowNested = el.allowNested.checked;
-    const lines = raw.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-    const total = lines.length;
-    const parsed = [];
-    const invalid = [];
+  function parseLineToParts(line, allowNested) {
+    if (!line) return [];
+    if (allowNested) {
+      return line.split('/').map(p => sanitizeName(p.trim())).filter(Boolean);
+    }
+    const clean = sanitizeName(line);
+    return clean ? [clean] : [];
+  }
 
-    for (const line of lines) {
-      if (allowNested) {
-        const parts = line.split('/').map(p => sanitizeName(p.trim())).filter(Boolean);
-        if (parts.length) parsed.push(parts);
-        else invalid.push(line);
-      } else {
-        const name = sanitizeName(line);
-        if (name) parsed.push([name]);
-        else invalid.push(line);
+  function parseInput() {
+    const rawMain = el.names.value || '';
+    const rawSub = el.subfoldersText.value || '';
+    const allowNested = el.allowNested.checked;
+
+    const mainLines = rawMain.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+    const subLines = rawSub.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+
+    const parsedMain = [];
+    const parsedSub = [];
+    const invalid = [];
+    const finalPaths = [];
+    const seen = new Set();
+
+    for (const line of mainLines) {
+      const parts = parseLineToParts(line, allowNested);
+      if (parts.length) parsedMain.push(parts);
+      else invalid.push(line);
+    }
+
+    for (const line of subLines) {
+      const parts = parseLineToParts(line, allowNested);
+      if (parts.length) parsedSub.push(parts);
+      else invalid.push(line);
+    }
+
+    if (parsedSub.length > 0) {
+      for (const mainParts of parsedMain) {
+        for (const subParts of parsedSub) {
+          const full = [...mainParts, ...subParts];
+          const key = full.join('///');
+          if (!seen.has(key)) {
+            seen.add(key);
+            finalPaths.push(full);
+          }
+        }
+      }
+    } else {
+      for (const mainParts of parsedMain) {
+        const key = mainParts.join('///');
+        if (!seen.has(key)) {
+          seen.add(key);
+          finalPaths.push(mainParts);
+        }
       }
     }
 
-    return { total, parsed, invalid };
+    return {
+      parsedMain,
+      parsedSub,
+      invalid,
+      parsed: finalPaths,
+      total: finalPaths.length
+    };
   }
 
   function log(msg, level = 'info') {
@@ -650,8 +689,10 @@
   }
 
   function updateStats() {
-    const { total, parsed, invalid } = parseNames();
-    el.total.textContent = total;
+    const { parsedMain, parsedSub, parsed, invalid } = parseInput();
+    el.mainCount.textContent = parsedMain.length;
+    el.subCount.textContent = parsedSub.length;
+    el.total.textContent = parsed.length;
     el.valid.textContent = parsed.length;
     el.invalid.textContent = invalid.length;
     el.btnCreate.disabled = !dirHandle || !parsed.length || isWorking;
@@ -677,13 +718,13 @@
         return r === 'granted';
       }
       return false;
-    } catch (e) {
+    } catch {
       return false;
     }
   }
 
   function showSuccessModal(count) {
-    el.successText.textContent = تم إنشاء ${count} مجلد بنجاح.;
+    el.successText.textContent = تم إنشاء ${count} مجلد/مسار بنجاح.;
     el.successModal.classList.add('show');
   }
 
@@ -704,8 +745,8 @@
 
     try {
       log('جارٍ فتح نافذة اختيار المجلد...', 'info');
-
       const picked = await window.showDirectoryPicker({ mode: 'readwrite' });
+
       if (!picked) {
         log('لم يتم اختيار أي مجلد.', 'warn');
         return;
@@ -732,16 +773,19 @@
   });
 
   el.btnPreview.addEventListener('click', () => {
-    const { parsed, invalid, total } = parseNames();
-    log(معاينة: ${parsed.length}/${total} صالح، ${invalid.length} غير صالح., invalid.length ? 'warn' : 'ok');
+    const { parsedMain, parsedSub, parsed, invalid } = parseInput();
+
+    log(المجلدات الرئيسية الصالحة: ${parsedMain.length}, 'info');
+    log(المجلدات الفرعية الصالحة: ${parsedSub.length}, 'info');
+    log(إجمالي المسارات التي سيتم إنشاؤها: ${parsed.length}, invalid.length ? 'warn' : 'ok');
 
     if (invalid.length) {
-      log(الأسماء غير الصالحة:\n- ${invalid.join('\n- ')}, 'warn');
+      log(العناصر غير الصالحة:\n- ${invalid.join('\n- ')}, 'warn');
     }
 
     if (parsed.length) {
-      const sample = parsed.slice(0, 10).map(p => p.join('/'));
-      log(أمثلة سيتم إنشاؤها:\n- ${sample.join('\n- ')}, 'info');
+      const sample = parsed.slice(0, 12).map(p => p.join('/'));
+      log(أمثلة للمسارات التي سيتم إنشاؤها:\n- ${sample.join('\n- ')}, 'info');
     }
   });
 
@@ -751,9 +795,9 @@
       return;
     }
 
-    const { parsed } = parseNames();
+    const { parsed } = parseInput();
     if (!parsed.length) {
-      alert('لا توجد أسماء صالحة للإنشاء.');
+      alert('لا توجد مسارات صالحة للإنشاء.');
       return;
     }
 
@@ -771,7 +815,8 @@
 
     createdCount = 0;
     el.doneCount.textContent = '0';
-    log(بدء الإنشاء لعدد ${parsed.length} من المجلدات..., 'info');
+
+    log(بدء الإنشاء لعدد ${parsed.length} مسار..., 'info');
 
     let errors = 0;
 
@@ -787,7 +832,7 @@
       }
     }
 
-    log(اكتمل الإنشاء. ناجح: ${createdCount} | أخطاء: ${errors}, errors ? 'warn' : 'ok');
+    log(اكتمل التنفيذ. ناجح: ${createdCount} | أخطاء: ${errors}, errors ? 'warn' : 'ok');
 
     if (createdCount > 0) {
       showSuccessModal(createdCount);
@@ -800,6 +845,7 @@
   });
 
   el.names.addEventListener('input', updateStats);
+  el.subfoldersText.addEventListener('input', updateStats);
   el.allowNested.addEventListener('change', updateStats);
 
   updateStats();
